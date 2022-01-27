@@ -102,7 +102,7 @@ class CarlaEnv(gym.Env):
             self.actor_list.append(self.sensors.init_sensor(sensor, self.sensor_attributes[sensor]['transform'], self.vehicle, self.sensor_attributes[sensor]['attributes']))
         
         # Tick the server
-        self.world.tick(0.1)
+        self.world.tick()
 
         # Prepare state inputed state
         self.state             = np.zeros([9, self.im_height, self.im_width])
@@ -115,20 +115,7 @@ class CarlaEnv(gym.Env):
         reward_total = 0
         done = False
         for i in range(0,3):
-            tick_success = False
-            count = 0
-            # To account for tick filure
-            while not tick_success:
-                try:
-                    self.world.tick(0.1)
-                    tick_success = True
-                    self.tick_count += 1
-                except:
-                    count += 1
-                    print("WARNING: tick not received: ")
-                if count > 5 :
-                    print('Consecutive tick failure!')
-                    break
+            self.world.tick()
 
             # Update state array using LiDAR and RGB images
             obs = self.sensors._get_observations()
