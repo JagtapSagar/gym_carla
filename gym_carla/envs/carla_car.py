@@ -3,7 +3,7 @@ import numpy as np
 import carla
 
 class SensorManager:
-    """This class initializes sensors and processes raw sensor data"""
+    """This class instantiates sensors and processes raw sensor data"""
     def __init__(self, world, im_height, im_width):
         self.world                = world
         self.im_height            = im_height
@@ -42,7 +42,7 @@ class SensorManager:
     ####################################################################################
 
     def init_sensor(self, sensor_type, transform, attached, sensor_options):
-        """Initializes vehicle sensors"""
+        """Instantiate vehicle sensors"""
 
         # RGB sensor
         if sensor_type == 'RGBCamera':
@@ -100,6 +100,7 @@ class SensorManager:
             radar.listen(self.process_radar_image)
             return radar
         
+        # Collision sensor
         elif sensor_type == "Collision":
             colsensor = self.world.get_blueprint_library().find("sensor.other.collision")
             colsensor = self.world.spawn_actor(colsensor, transform, attach_to=attached)
