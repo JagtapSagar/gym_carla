@@ -152,7 +152,7 @@ class SensorManager:
         array = np.reshape(array, (self.im_height, self.im_width, 4))
         array = array[:,:,:3]        # 3 channel image
         array = array[:,:,::-1]
-        self.rgb_image = cv2.cvtColor(array, cv2.COLOR_BGR2RGB)
+        self.rgb_image = array #cv2.cvtColor(array, cv2.COLOR_BGR2RGB)
     
     def process_semantic_rgb_image(self, data):
         """Process semantic image data and mask"""

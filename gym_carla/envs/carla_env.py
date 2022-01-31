@@ -7,6 +7,7 @@ import cv2
 import carla
 
 from gym_carla.envs.carla_car import SensorManager
+from gym_carla.envs.pygame_2d import Pygame_2d
 
 class CarlaEnv(gym.Env):
     def __init__(self):
@@ -66,6 +67,9 @@ class CarlaEnv(gym.Env):
                                                 'attributes':{'horizontal_fov' : '90', 'vertical_fov' : '30'}},
                                     'Collision':{'transform':carla.Transform(), 'attributes':None}
                                     }
+
+        # Set up pygame
+        self.game = Pygame_2d(self.im_width, self.im_height)
 
     
     def set_synchronous_mode(self, synchronous = True):
@@ -239,8 +243,9 @@ class CarlaEnv(gym.Env):
         """Render image in pygame window"""
         # self.clock.tick()
         image = self.sensors._get_observations()
-        cv2.imshow('', image)
-        cv2.waitKey(1)
+        self.game.render(image)
+        # cv2.imshow('', image)
+        # cv2.waitKey(1)
 
 
     def destroy(self):

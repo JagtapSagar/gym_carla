@@ -8,6 +8,11 @@ def main():
     for i in range(0,1000):
         env.render()
         env.world.tick()
+        env.game.get_events()
+        if env.game.to_quit():
+            print('Time to quit')
+            break
+    print('I quit')
     env.destroy()
     env.exit()
 
