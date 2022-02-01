@@ -253,6 +253,6 @@ class CarlaEnv(gym.Env):
         for actors in self.actor_list:
             actors.destroy()
     
-    def exit(self):
+    def exit_sim(self):
         self.world.apply_settings(self.original_settings)
         self.set_synchronous_mode(False)
