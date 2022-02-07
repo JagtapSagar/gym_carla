@@ -1,42 +1,5 @@
 import numpy as np
 import pygame
-from pygame.locals import KMOD_CTRL
-from pygame.locals import KMOD_SHIFT
-from pygame.locals import K_0
-from pygame.locals import K_9
-from pygame.locals import K_BACKQUOTE
-from pygame.locals import K_BACKSPACE
-from pygame.locals import K_COMMA
-from pygame.locals import K_DOWN
-from pygame.locals import K_ESCAPE
-from pygame.locals import K_F1
-from pygame.locals import K_LEFT
-from pygame.locals import K_PERIOD
-from pygame.locals import K_RIGHT
-from pygame.locals import K_SLASH
-from pygame.locals import K_SPACE
-from pygame.locals import K_TAB
-from pygame.locals import K_UP
-from pygame.locals import K_a
-from pygame.locals import K_b
-from pygame.locals import K_c
-from pygame.locals import K_d
-from pygame.locals import K_g
-from pygame.locals import K_h
-from pygame.locals import K_i
-from pygame.locals import K_l
-from pygame.locals import K_m
-from pygame.locals import K_n
-from pygame.locals import K_p
-from pygame.locals import K_q
-from pygame.locals import K_r
-from pygame.locals import K_s
-from pygame.locals import K_v
-from pygame.locals import K_w
-from pygame.locals import K_x
-from pygame.locals import K_z
-from pygame.locals import K_MINUS
-from pygame.locals import K_EQUALS
 
 class Pygame_2d:
     def __init__(self, im_width, im_height):
@@ -79,13 +42,10 @@ class Pygame_2d:
     def event_parser(self):
         # This is event parser module
 
-        # TODO
+        # TODO 
         # Add manual control toggle
         #            - seperate keys to enable or disable
         #            - disable autopilot toggle if this is enabled
-        # Add autopilot toggle
-        #            - seperate keys to enable or disable
-        #            - disable manual control if this is enabled
         # Add manual control events
         # Add events to change sensor value being displayed
 
@@ -93,3 +53,14 @@ class Pygame_2d:
             if event.type==pygame.QUIT:
                 self.quit = True
                 pygame.quit()
+            elif event.type==pygame.KEYUP:
+
+                # Enable or disable autopilot
+                if event.key==pygame.K_COMMA:
+                    if not self.autopilot:
+                        self.autopilot = True
+                        self.manual    = False
+                        print('Autopilot Enabled')
+                    else:
+                        self.autopilot = False
+                        print('Autopilot Disabled')

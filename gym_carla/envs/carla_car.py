@@ -27,7 +27,8 @@ class SensorManager:
 
     def _get_observations(self):
         """Returns sensing ouputs"""
-        return self.rgb_image
+        # Return all sensor outputs
+        return self.rgb_image, self.lidar_image
     
     def _check_for_collision(self):
         """Checks if collision occured"""

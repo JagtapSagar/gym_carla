@@ -5,16 +5,22 @@ def main():
     env = gym.make('CarlaEnv-v0')
     _ = env.reset()
     env.vehicle.set_autopilot(True)
-    for i in range(0,1000):
+    for _ in range(0,1000):
         env.render()
-        env.world.tick()
+        action = 1
+        state, reward, done, info = env.step(action)
+        if done:
+            _ = env.reset()
+
         env.game.event_parser()
+
+
         if env.game.to_quit():
             print('Time to quit')
             break
     print('I quit')
     env.destroy()
-    env.exit_sim()
+    env.close()
 
 
 if __name__=="__main__":
