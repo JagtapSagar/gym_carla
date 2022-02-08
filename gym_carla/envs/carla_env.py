@@ -59,8 +59,8 @@ class CarlaEnv(gym.Env):
         self.sensor_attributes  =  {
                                     'RGBCamera':{'transform':carla.Transform(carla.Location(x=2.5, z=0.7)),
                                                 'attributes':{'image_size_x' : str(self.im_height), 'image_size_y' : str(self.im_width), 'fov' : str(110)}},
-                                    'SemacticRGBCamera':{'transform':carla.Transform(carla.Location(x=2.5, z=0.7)),
-                                                'attributes':{'image_size_x' : str(self.im_height), 'image_size_y' : str(self.im_width), 'fov' : str(110)}},
+                                    # 'SemacticRGBCamera':{'transform':carla.Transform(carla.Location(x=2.5, z=0.7)),
+                                    #             'attributes':{'image_size_x' : str(self.im_height), 'image_size_y' : str(self.im_width), 'fov' : str(110)}},
                                     'LiDAR'    :{'transform':carla.Transform(carla.Location(x=0, z=2.4)),
                                                 'attributes':{'channels' : '64', 'range' : '100',
                                                             'points_per_second': '250000', 'rotation_frequency': '20'}},
@@ -89,20 +89,13 @@ class CarlaEnv(gym.Env):
     def reset(self):
         """Resets CARLA environment"""
 
-        print('Resetting')
-
         try:
             # Destroy all actors
             if len(self.actor_list)>0:
-                print('resetting list')
                 self.destroy()
                 self.actor_list = []
-                print('list reset')
         except:
             self.actor_list = []
-            print('list created')
-        
-        print('Resetting_2')
         
         self.action_buffer                = None         # Used to store last action
         self.tick_count                   = 0
@@ -190,55 +183,55 @@ class CarlaEnv(gym.Env):
 
         self.action_buffer = action
         # throttle = 0.6 if self._get_vehicle_speed()<=self.speed_threshold else 0
-        throttle = 0.6
+        throttle                          = 0.6
         self.r_proximity                  = 0
 
-        # if action == 0: # Brake
-        #     self.vehicle.apply_control(carla.VehicleControl(throttle=0, steer=0, brake=1))
-        # elif action == 1: # Forward
-        #     self.vehicle.apply_control(carla.VehicleControl(throttle=throttle, steer= 0))
-        # elif action == 2: # Slight Left
-        #     self.vehicle.apply_control(carla.VehicleControl(throttle=throttle, steer=-0.25))
-        #     if self.sensors._get_road_highlights(-1):
-        #         self.r_proximity = -0.5
-        # elif action == 3: # Slight Right
-        #     self.vehicle.apply_control(carla.VehicleControl(throttle=throttle, steer=0.25))
-        #     if self.sensors._get_road_highlights(1):
-        #         self.r_proximity = -0.5
-        # elif action == 4: # 45 Left
-        #     self.vehicle.apply_control(carla.VehicleControl(throttle=throttle, steer=-0.5))
-        #     if self.sensors._get_road_highlights(-1):
-        #         self.r_proximity = -0.5
-        # elif action == 5: # 45 Right
-        #     self.vehicle.apply_control(carla.VehicleControl(throttle=throttle, steer=0.5))
-        #     if self.sensors._get_road_highlights(1):
-        #         self.r_proximity = -0.5
-
-        # Actions with old set od rewards
         if action == 0: # Brake
-            self.vehicle.apply_control(carla.VehicleControl(throttle=0, steer=0, brake=1.0))
-            if self.sensors._get_road_highlights(0):
-                self.r_proximity = 0.5
+            self.vehicle.apply_control(carla.VehicleControl(throttle=0, steer=0, brake=1))
         elif action == 1: # Forward
-            self.vehicle.apply_control(carla.VehicleControl(throttle=0.6, steer= 0))
-            if not self.sensors._get_road_highlights(0):
-                self.r_proximity = 0.25
+            self.vehicle.apply_control(carla.VehicleControl(throttle=throttle, steer= 0))
         elif action == 2: # Slight Left
-            self.vehicle.apply_control(carla.VehicleControl(throttle=0.6, steer=-0.2))
+            self.vehicle.apply_control(carla.VehicleControl(throttle=throttle, steer=-0.25))
             if self.sensors._get_road_highlights(-1):
                 self.r_proximity = -0.5
         elif action == 3: # Slight Right
-            self.vehicle.apply_control(carla.VehicleControl(throttle=0.6, steer=0.2))
+            self.vehicle.apply_control(carla.VehicleControl(throttle=throttle, steer=0.25))
             if self.sensors._get_road_highlights(1):
                 self.r_proximity = -0.5
         elif action == 4: # 45 Left
-            self.vehicle.apply_control(carla.VehicleControl(throttle=0.6, steer=-0.5))
+            self.vehicle.apply_control(carla.VehicleControl(throttle=throttle, steer=-0.5))
             if self.sensors._get_road_highlights(-1):
                 self.r_proximity = -0.5
         elif action == 5: # 45 Right
-            self.vehicle.apply_control(carla.VehicleControl(throttle=0.6, steer=0.5))
+            self.vehicle.apply_control(carla.VehicleControl(throttle=throttle, steer=0.5))
             if self.sensors._get_road_highlights(1):
                 self.r_proximity = -0.5
+
+        # Actions with old set od rewards
+        # if action == 0: # Brake
+        #     self.vehicle.apply_control(carla.VehicleControl(throttle=0, steer=0, brake=1.0))
+        #     if self.sensors._get_road_highlights(0):
+        #         self.r_proximity = 0.5
+        # elif action == 1: # Forward
+        #     self.vehicle.apply_control(carla.VehicleControl(throttle=0.6, steer= 0))
+        #     if not self.sensors._get_road_highlights(0):
+        #         self.r_proximity = 0.25
+        # elif action == 2: # Slight Left
+        #     self.vehicle.apply_control(carla.VehicleControl(throttle=0.6, steer=-0.2))
+        #     if self.sensors._get_road_highlights(-1):
+        #         self.r_proximity = -0.5
+        # elif action == 3: # Slight Right
+        #     self.vehicle.apply_control(carla.VehicleControl(throttle=0.6, steer=0.2))
+        #     if self.sensors._get_road_highlights(1):
+        #         self.r_proximity = -0.5
+        # elif action == 4: # 45 Left
+        #     self.vehicle.apply_control(carla.VehicleControl(throttle=0.6, steer=-0.5))
+        #     if self.sensors._get_road_highlights(-1):
+        #         self.r_proximity = -0.5
+        # elif action == 5: # 45 Right
+        #     self.vehicle.apply_control(carla.VehicleControl(throttle=0.6, steer=0.5))
+        #     if self.sensors._get_road_highlights(1):
+        #         self.r_proximity = -0.5
         
         # Perform action and observe states and reward
         reward,done = self.skipFrames()
@@ -318,6 +311,71 @@ class CarlaEnv(gym.Env):
 
         return reward, done
 
+    
+    # Old get rewards function
+    # def _get_reward(self):
+    #     """Calculate the step reward"""
+
+    #     # Set individual reward components to zero
+    #     r_steer    = 0         # Steering reward
+    #     r_radar    = 0         # Reward based on distance to obstacle
+    #     r_con      = 0         # Reward for continuation
+    #     r_col      = 0         # Reward component for collision
+    #     r_lat      = 0         # Lateral component
+    #     done       = False     # True only in case of termination
+        
+    #     # Calculate reward for vehicle speed (using quadratic function)
+    #     kmh        = self._get_vehicle_speed()
+    #     r_s        = (-0.0017*kmh**2)+(0.1167*kmh)-1
+
+    #     # Check radar thresholds for reward
+    #     radar_dist, radar_vel = self.sensors._get_nearest_radar_value()
+
+    #     # Check radar thresholds for reward
+    #     if (radar_dist is not None):
+    #         if (radar_dist < 5):
+    #             r_radar = -1
+    #             if self.action_buffer==0:
+    #                 self.r_proximity = 0.1
+    #             if self.action_buffer==1:
+    #                 self.r_proximity = -0.5
+    #             radar_dist = None
+    #         else:
+    #             if self.action_buffer==1 and not(self.sensors._get_road_highlights(0) or self.sensors._get_road_highlights(1) or self.sensors._get_road_highlights(-1)):
+    #                 self.r_proximity = 0.3
+    #             elif not self.sensors._get_road_highlights(0):
+    #                 if self.action_buffer==0:
+    #                     self.r_proximity = -0.5
+    #                 if self.action_buffer==1:
+    #                     self.r_proximity = 0.1
+    #             else:
+    #                 if self.action_buffer==0:
+    #                     self.r_proximity = -0.1
+    #                 if self.action_buffer==1:
+    #                     self.r_proximity = 0.1
+    #             r_lat = -1*(0.05*kmh * abs(self.vehicle.get_control().steer))
+
+    #     # Calculate Reward for steering
+    #     r_steer = self.vehicle.get_control().steer**2
+    #     if (self.vehicle.get_control().steer<0) and (self.sensors._get_road_highlights(-1)) or (self.vehicle.get_control().steer>0) and (self.sensors._get_road_highlights(1)):
+    #         r_steer *= -1
+
+    #     # Check for collision
+    #     if self.collision != []:
+    #         print("Collision event occurred")
+    #         done = True
+    #         r_col = -1
+        
+    #     if done == False:
+    #         r_con = 0.5
+
+    #     # Reward function
+    #     reward = 200*r_col + 1*r_radar + 1*r_s + 1*r_con + 1*r_steer + self.r_proximity + 1*r_lat
+
+    #     # print('Reward Col:'+str(200*r_col)+', Radar:'+str(r_radar)+', Speed('+str(kmh)+'):'+ str(r_s)+', Cont.:'+str(r_con)+', steer:'+str(self.r))
+
+    #     return reward,done
+
     def render(self):
         """Render image in pygame window"""
         # self.clock.tick()
@@ -331,6 +389,7 @@ class CarlaEnv(gym.Env):
         """Destroy all actors in list"""
         for actors in self.actor_list:
             actors.destroy()
+
     
     def close(self):
         self.world.apply_settings(self.original_settings)

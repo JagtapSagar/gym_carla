@@ -9,6 +9,7 @@ def main():
         env.render()
         action = 1
         state, reward, done, info = env.step(action)
+        # print(reward)
         if done:
             _ = env.reset()
 
