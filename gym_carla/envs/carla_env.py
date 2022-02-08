@@ -56,10 +56,11 @@ class CarlaEnv(gym.Env):
         self.sensors = SensorManager(self.world, self.im_height, self.im_width)
 
         # Set sensor attributes
-        self.sensor_attributes  =  {'RGBCamera':{'transform':carla.Transform(carla.Location(x=2.5, z=0.7)),
-                                                'attributes':{'image_size_x' : str(self.im_height), 'image_size_y' : str(self.im_width)}},
-                                    # 'SemacticRGBCamera':{'transform':carla.Transform(carla.Location(x=2.5, z=0.7)),
-                                    #             'attributes':{'image_size_x' : str(self.im_height), 'image_size_y' : str(self.im_width)}},
+        self.sensor_attributes  =  {
+                                    'RGBCamera':{'transform':carla.Transform(carla.Location(x=2.5, z=0.7)),
+                                                'attributes':{'image_size_x' : str(self.im_height), 'image_size_y' : str(self.im_width), 'fov' : str(110)}},
+                                    'SemacticRGBCamera':{'transform':carla.Transform(carla.Location(x=2.5, z=0.7)),
+                                                'attributes':{'image_size_x' : str(self.im_height), 'image_size_y' : str(self.im_width), 'fov' : str(110)}},
                                     'LiDAR'    :{'transform':carla.Transform(carla.Location(x=0, z=2.4)),
                                                 'attributes':{'channels' : '64', 'range' : '100',
                                                             'points_per_second': '250000', 'rotation_frequency': '20'}},
@@ -148,7 +149,9 @@ class CarlaEnv(gym.Env):
             # Update state array using LiDAR and RGB images
             obs_rgb, obs_lidar = self.sensors._get_observations()
             self.state[i,:,:]                  = obs_lidar
-            self.state[3+(i*3):6+(i*3),:,:]    = np.transpose(obs_rgb,(2,0,1))
+            self.state[3+(i*3):6+(i*3),:,:]    = obs_rgb.transpose(2,0,1)
+            # cv2.imshow("", self.state[3+(i*3):6+(i*3),:,:])
+            # cv2.waitKey(1)
             
             if not done:
                 reward,done                    = self._get_reward()
