@@ -248,6 +248,7 @@ class CarlaEnv(gym.Env):
         return True if self.tick_count >= self.terminal_tick else False
     
     def _get_vehicle_speed(self):
+        """Calculates vehicle speed"""
         v          = self.vehicle.get_velocity()
         kmh        = int(3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2))
         return kmh
@@ -384,13 +385,12 @@ class CarlaEnv(gym.Env):
         # cv2.imshow('', image)
         # cv2.waitKey(1)
 
-
     def destroy(self):
         """Destroy all actors in list"""
         for actors in self.actor_list:
             actors.destroy()
-
     
     def close(self):
+        """Reverts back to original settings"""
         self.world.apply_settings(self.original_settings)
         self.set_synchronous_mode(False)
