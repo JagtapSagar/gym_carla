@@ -1,5 +1,6 @@
 import gym_carla
 import gym
+# import cv2
 
 def main():
     env = gym.make('CarlaEnv-v0')

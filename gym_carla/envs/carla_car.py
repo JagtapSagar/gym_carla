@@ -28,7 +28,7 @@ class SensorManager:
     def _get_observations(self):
         """Returns sensing ouputs"""
         # Return all sensor outputs
-        return self.rgb_image, self.lidar_image
+        return self.semantic_image, self.lidar_image
     
     def _check_for_collision(self):
         """Checks if collision occured"""
@@ -65,6 +65,17 @@ class SensorManager:
             # Spawn actor, set listener, add to actor list
             camera = self.world.spawn_actor(camera_bp, transform, attach_to=attached)
             camera.listen(self.process_semantic_rgb_image)
+            return camera
+        
+        # Semantic RGB sensor
+        elif sensor_type == 'RoadMask':
+            camera_bp = self.world.get_blueprint_library().find('sensor.camera.semantic_segmentation')
+            # Set attributes
+            for key in sensor_options:
+                camera_bp.set_attribute(key, sensor_options[key])
+            # Spawn actor, set listener, add to actor list
+            camera = self.world.spawn_actor(camera_bp, transform, attach_to=attached)
+            camera.listen(self.process_semantic_road_mask)
             return camera
         
         # LiDAR sensor
@@ -158,6 +169,16 @@ class SensorManager:
     def process_semantic_rgb_image(self, data):
         """Process semantic image data and mask"""
 
+        # Create 3 channel semantic image
+        data.convert(carla.ColorConverter.CityScapesPalette)
+        array = np.frombuffer(data.raw_data, dtype=np.dtype("uint8"))
+        array = np.reshape(array, (self.im_height, self.im_width, 4))
+        array = array[:,:,:3]        # 3 channel image
+        self.semantic_image = array
+    
+    def process_semantic_road_mask(self, data):
+        """Process semantic image data to produce single channel road mask"""
+
         # Create single channel road mask image
         i = np.array(data.raw_data)
         i2 = i.reshape((self.im_height, self.im_width, 4))  # RGBA
@@ -167,13 +188,6 @@ class SensorManager:
         sem_img[sem_img == 7] = 255
         sem_img[sem_img < 255] = 0
         self.mask = sem_img
-
-        # Create 3 channel semantic image
-        data.convert(carla.ColorConverter.CityScapesPalette)
-        array = np.frombuffer(data.raw_data, dtype=np.dtype("uint8"))
-        array = np.reshape(array, (self.im_height, self.im_width, 4))
-        array = array[:,:,:3]        # 3 channel image
-        self.semantic_image = array
     
     def process_lidar_image(self, data):
         """Process LIDAR image data"""
