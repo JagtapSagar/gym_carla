@@ -1,2 +1,2 @@
-Gym wrapper for CARLA.
-Not complete yet
+Installation instruction:
+pip install -e .
