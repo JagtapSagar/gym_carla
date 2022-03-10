@@ -6,7 +6,7 @@ import math
 import cv2
 import carla
 
-from gym_carla.envs.carla_car import SensorManager
+from gym_carla.envs.carla_sensors import SensorManager
 from gym_carla.envs.pygame_2d import Pygame_2d
 from gym_carla.agents.navigation.behavior_agent import BehaviorAgent
 

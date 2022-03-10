@@ -57,7 +57,7 @@ class SensorManager:
             return camera
         
         # Semantic RGB sensor
-        elif sensor_type == 'SemacticRGBCamera':
+        elif sensor_type == 'SemanticRGBCamera':
             camera_bp = self.world.get_blueprint_library().find('sensor.camera.semantic_segmentation')
             # Set attributes
             for key in sensor_options:
