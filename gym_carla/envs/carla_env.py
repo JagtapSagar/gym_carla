@@ -59,7 +59,7 @@ class CarlaEnv(gym.Env):
         self.sensor_attributes  =  {
                                     'RGBCamera':{'transform':carla.Transform(carla.Location(x=2.5, z=0.7)),
                                                 'attributes':{'image_size_x' : str(self.im_height), 'image_size_y' : str(self.im_width), 'fov' : str(110)}},
-                                    'SemacticRGBCamera':{'transform':carla.Transform(carla.Location(x=2.5, z=0.7)),
+                                    'SemanticRGBCamera':{'transform':carla.Transform(carla.Location(x=2.5, z=0.7)),
                                                 'attributes':{'image_size_x' : str(self.im_height), 'image_size_y' : str(self.im_width), 'fov' : str(110)}},
                                     'RoadMask' :{'transform':carla.Transform(carla.Location(x=2.5, z=0.7)),
                                                 'attributes':{'image_size_x' : str(self.im_height), 'image_size_y' : str(self.im_width), 'fov' : str(110)}},
